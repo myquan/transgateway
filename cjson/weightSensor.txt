@@ -1,0 +1,4 @@
+[{"ID": "A123B001", "weight": 12.3, "battery": 0.8},
+{"ID":"A123B002", "weight": 62.5, "battery": 0.58}
+]
+
