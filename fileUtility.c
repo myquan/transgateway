@@ -111,7 +111,7 @@ static cJSON *parse_file(const char *filename)
 
 char* getConnParameters(){
     char *expected = NULL;
-    char *expected_path = "../config/conn-param.cfg";
+    char *expected_path = "config/conn-param.cfg";
 	cJSON* tree = NULL;
 	char result[20];
 
@@ -134,7 +134,7 @@ char* getConnParameters(){
 }
 
 
-#define funcmain 1
+#define funcmain 0
 #if funcmain
 int main(void)
 {

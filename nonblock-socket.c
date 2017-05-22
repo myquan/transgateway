@@ -10,6 +10,7 @@
 #include<unistd.h>    //usleep
 #include<fcntl.h> //fcntl
 #include<sys/time.h>
+#include"fileUtility.h"
  
 //Size of each chunk of data received, try changing this
 #define CHUNK_SIZE 512
@@ -29,10 +30,11 @@ int main(int argc , char *argv[])
     {
         printf("Could not create socket");
     }
+	char* destination = getConnParameters();
      
     //ip address of www.msn.com (get by doing a ping www.msn.com at terminal)
     server.sin_addr.s_addr = inet_addr("192.168.3.1");
-    server.sin_addr.s_addr = inet_addr("54.199.226.195");
+    server.sin_addr.s_addr = inet_addr(destination);
     server.sin_family = AF_INET;
     server.sin_port = htons( 80 );
  
