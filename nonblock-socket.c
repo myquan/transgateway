@@ -24,42 +24,46 @@ int main(int argc , char *argv[])
     struct sockaddr_in server;
     char *message , server_reply[2000];
      
+	char* destination = getConnParameters();
+     
+    //ip address of www.msn.com (get by doing a ping www.msn.com at terminal)
+	 while (1){
     //Create socket
     socket_desc = socket(AF_INET , SOCK_STREAM , 0);
     if (socket_desc == -1)
     {
         printf("Could not create socket");
     }
-	char* destination = getConnParameters();
-     
-    //ip address of www.msn.com (get by doing a ping www.msn.com at terminal)
     server.sin_addr.s_addr = inet_addr("192.168.3.1");
     server.sin_addr.s_addr = inet_addr(destination);
     server.sin_family = AF_INET;
-    server.sin_port = htons( 80 );
- 
-    //Connect to remote server
-    if (connect(socket_desc , (struct sockaddr *)&server , sizeof(server)) < 0)
-    {
-        puts("connect error");
-        return 1;
-    }
-     
-    puts("Connected\n");
-     
-    //Send some data
-    message = "GET /?st=1 HTTP/1.1\r\nHost: www.quan.com.tw\r\n\r\n";
-    if( send(socket_desc , message , strlen(message) , 0) < 0)
-    {
-        puts("Send failed");
-        return 1;
-    }
-    puts("Data Send\n");
-     
-    //Now receive full data
-    int total_recv = recv_timeout(socket_desc, 4);
-     
-    printf("\n\nDone. Received a total of %d bytes\n\n" , total_recv);
+    server.sin_port = htons( 8000 );
+		//Connect to remote server
+		if (connect(socket_desc , (struct sockaddr *)&server , sizeof(server)) < 0)
+		{
+		    puts("connect error");
+		    return 1;
+		}
+		 
+		puts("Connected\n");
+		 
+		//Send some data
+		message = "GET /?st=1 HTTP/1.1\r\nHost: www.quan.com.tw\r\n\r\n";
+		if( send(socket_desc , message , strlen(message) , 0) < 0)
+		{
+		    puts("Send failed");
+		    return 1;
+		}
+		puts("Data Send\n");
+		 
+
+		//Now receive full data
+		int total_recv = recv_timeout(socket_desc, 4);
+		 
+		printf("\n\nDone. Received a total of %d bytes\n\n" , total_recv);
+		close(socket_desc);
+		usleep(3000000);
+	}
     return 0;
 }
  
@@ -110,10 +114,15 @@ i++;
         }
         else
         {
-            total_size += size_recv;
-            printf("%s" , chunk);
-            //reset beginning time
-            gettimeofday(&begin , NULL);
+			if (size_recv ==0) {
+				close(s);
+				break;
+			}else{
+		        total_size += size_recv;
+		        printf("%s" , chunk);
+		        //reset beginning time
+		        gettimeofday(&begin , NULL);
+			}
         }
     }
      
